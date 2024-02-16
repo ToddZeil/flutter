@@ -165,6 +165,7 @@ class DropdownMenu<T> extends StatefulWidget {
     this.searchCallback,
     required this.dropdownMenuEntries,
     this.inputFormatters,
+    this.hideTrailingIcon = true,
   });
 
   /// Determine if the [DropdownMenu] is enabled.
@@ -403,6 +404,11 @@ class DropdownMenu<T> extends StatefulWidget {
   ///  * [TextEditingController], which implements the [Listenable] interface
   ///    and notifies its listeners on [TextEditingValue] changes.
   final List<TextInputFormatter>? inputFormatters;
+
+  /// Optional flag to hide the trailing icon in the text field.
+  ///
+  /// Defaults to false
+  final bool hideTrailingIcon;
 
   @override
   State<DropdownMenu<T>> createState() => _DropdownMenuState<T>();
@@ -716,7 +722,7 @@ class _DropdownMenuState<T> extends State<DropdownMenu<T>> {
       crossAxisUnconstrained: false,
       builder: (BuildContext context, MenuController controller, Widget? child) {
         assert(_initialMenu != null);
-        final Widget trailingButton = Padding(
+        final Widget? trailingButton = widget.hideTrailingIcon ? null : Padding(
           padding: const EdgeInsets.all(4.0),
           child: IconButton(
             isSelected: controller.isOpen,
@@ -797,7 +803,7 @@ class _DropdownMenuState<T> extends State<DropdownMenu<T>> {
           children: <Widget>[
             textField,
             for (final Widget item in _initialMenu!) item,
-            trailingButton,
+            if(trailingButton != null) trailingButton,
             leadingButton,
           ],
         );
